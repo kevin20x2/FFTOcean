@@ -113,10 +113,10 @@ public class GetWave : MonoBehaviour {
         Wind[1] = new Vector4(1.0f,-1.0f,0,0);
 
         _Resolution[2] = ImageResolution[2] = 4;
-        Amp[2] = 15;
+        Amp[2] = 34;
         Choppiness[2] = 0.4f;
         WaveLength[2] = 4.0f;
-        timeSpeed[2] = 0.2f;
+        timeSpeed[2] = 0.3f;
         Wind[2] = new Vector4(1.414f,0 , 0, 0);
 
 
@@ -240,7 +240,7 @@ public class GetWave : MonoBehaviour {
             Graphics.Blit(null, i%2==0?sumSpectrumpong:sumSpectrumping, MixMat);
         }
         WhiteCapMat.SetTexture("_Displacement", waveNumber % 2 == 0 ? sumSpectrumping : sumSpectrumpong);
-        WhiteCapMat.SetTexture("_Bump",waveNumber%2 == 0? sumSpectrumping:sumSpectrumping);
+        //WhiteCapMat.SetTexture("_Bump",waveNumber%2 == 0? sumSpectrumping:sumSpectrumping);
         Graphics.Blit(null, WhiteCap, WhiteCapMat);
         meshRender.material.SetTexture("_WhiteCapInput", WhiteCap);
         meshRender.material.SetTexture("_HeightInput",waveNumber%2 == 0? sumHeightping:sumHeightpong);

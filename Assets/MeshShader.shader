@@ -73,7 +73,8 @@
 				float3 ambientColor = float3(0.0, 0.65, 0.75);
 				float3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
 				float4 t = tex2D(_SpectrumInput,i.uv);
-				float whitecap = saturate((1.0f-tex2D(_WhiteCapInput, i.uv).r));
+				//float whitecap = saturate((1.0f-tex2D(_WhiteCapInput, i.uv).r));
+				float whitecap = tex2D(_WhiteCapInput, i.uv).r;
 				//whitecap = whitecap > 0.8 ? whitecap : 0.0f;
 				float3 nor = float3(0.0f, 1.0f, 0.0f) - float3(t.g,0.0f,t.a);
 				float halfLambert = dot(normalize(nor), worldLightDir) *0.5 + 0.5;
@@ -84,8 +85,9 @@
 				float3 specular = _LightColor0.rgb *_Specular.rgb*pow(saturate(dot(reflectDir, viewDir)), _Gloss);
 				float fog_factor = min(-i.worldPos.z / (64*15), 1.0);
 			//	float fog_factor = 0.0f;
-				float3 color = 0.3f*ambientColor + 0.3f*diffuse + (facing ? 1.8f*specular : float3(0, 0, 0)); //+ float3(whitecap,whitecap,whitecap);
-				float3 fragColor = color * (1.0 - fog_factor) + float4(0.24, 0.75, 0.65, 1.0) * (fog_factor);
+				float3 color = 0.3f*ambientColor + 0.3f*diffuse + (facing ? 1.8f*specular : float3(0, 0, 0)) + float3(whitecap,whitecap,whitecap);
+				//float3 color = float3(whitecap, whitecap, whitecap);
+				float3 fragColor = color *(1.0 - fog_factor) + float4(0.24, 0.75, 0.65, 1.0) * (fog_factor);
 				return float4(fragColor,1.0f);
 			}
 			ENDCG

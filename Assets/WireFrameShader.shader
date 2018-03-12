@@ -6,10 +6,12 @@
 		_SpectrumInput("spectrum Texture",2D) = "black" {}
 		_Diffuse("Diffuse",Color) = (0.5,0.65,0.75,1.0)
 		_Specular("specular",Color) = (1,1,1,1)
+		_Noise("noise ",2D) = "black" {}
 		_WireColor("wirecolor",Color) = (0,0,0,0)
 		_Gloss("gloss" , Int) = 2
 		_Resolution("resoulution", Float) = 128
 		_ShowWire("show Wire", Int) = 0
+		_WhiteCapHeight("whitecap height",Float) = 1.0
 	}
 	SubShader
 	{
@@ -43,12 +45,14 @@
 
 			sampler2D _HeightInput;
 			sampler2D _SpectrumInput;
+			sampler2D _Noise;
 			float4 _Diffuse;
 			float4 _Specular;
 			float4 _WireColor;
 			int _Gloss;
 			int _ShowWire;
 			float _Resolution;
+			float _WhiteCapHeight;
 			v2f vert (appdata v)
 			{
 				v2f o;
@@ -77,6 +81,8 @@
 				//	return float4(0.0f, 0.0f, 0.0f, 1.0f);
 				//if (mody < EPS)
 				//	return float4(0.0f, 0.0f, 0.0f, 1.0f);
+				float height_data = tex2D(_HeightInput,i.uv).r;
+				float4 noise = tex2D(_Noise,i.uv);
 				float3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
 				float3 ambientColor = float3(0.0, 0.65, 0.75);
 				float3 worldLightDir = normalize(_WorldSpaceLightPos0.xyz);
@@ -92,9 +98,12 @@
 				float3 color = 0.3f*ambientColor + 0.3f*diffuse +(facing ? 1.8f*specular : float3(0, 0, 0));
 				float3 fragColor = color * (1.0 - fog_factor) + float4(0.24, 0.75, 0.65, 1.0) * (fog_factor);
 
-				bool wireframex= modx < EPS;
+				bool wireframex = modx < EPS;
 				bool wireframey = mody < EPS;
 				bool wireframexy = abs(modx - mody) < EPS;
+				if (height_data > _WhiteCapHeight)
+					fragColor += noise;
+
 				if (_ShowWire >0) {
 					fragColor = wireframex ? _WireColor : fragColor;
 					fragColor = wireframey ? _WireColor : fragColor;

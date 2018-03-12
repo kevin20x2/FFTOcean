@@ -61,7 +61,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Choppiness: 0.4
-    - _CpuTime: 3.7800024
+    - _CpuTime: 27.017056
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
